@@ -12,6 +12,7 @@ struct TrafficLightApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .background(.gray)
         }
     }
 }
