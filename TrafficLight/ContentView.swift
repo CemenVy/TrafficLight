@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
+    // MARK: - State properties
     @State var redLightVisible = false
     @State var yellowLightVisible = false
     @State var greenLightVisible = false
@@ -17,9 +18,11 @@ struct ContentView: View {
     
     @State var currentColor = TrafficLight.red
     
-    let signalIsOn: CGFloat = 1
-    let signalIsOff: CGFloat = 0.3
+    // MARK: - Private properties
+    private let signalIsOn: CGFloat = 1
+    private let signalIsOff: CGFloat = 0.3
     
+    // MARK: - Body
     var body: some View {
         VStack(spacing: 100) {
             VStack(spacing: 10) {
@@ -43,7 +46,7 @@ struct ContentView: View {
             .clipShape(.capsule)
         }
     }
-    
+    // MARK: - Private methods
     private func changeLightDidTapped() {
         if titleButton == "START" {
             titleButton = "NEXT"
@@ -68,6 +71,7 @@ struct ContentView: View {
     }
 }
 
+    // MARK: - Extension Traffic Light
 extension ContentView {
     enum TrafficLight {
         case red, yellow, green
