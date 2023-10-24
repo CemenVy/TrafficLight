@@ -10,72 +10,57 @@ import SwiftUI
 struct ContentView: View {
     
     // MARK: - State properties
-    @State var redLightVisible = false
-    @State var yellowLightVisible = false
-    @State var greenLightVisible = false
-    
-    @State var titleButton = "START"
-    
-    @State var currentColor = TrafficLight.red
-    
-    // MARK: - Private properties
-    private let signalIsOn: CGFloat = 1
-    private let signalIsOff: CGFloat = 0.3
+    @State private var titleButton = "START"
+    @State private var currentColor = TrafficLight.off
     
     // MARK: - Body
     var body: some View {
-        VStack(spacing: 100) {
-            VStack(spacing: 10) {
-                CircleView(color: .red)
-                    .opacity(redLightVisible ? signalIsOn : signalIsOff)
-                CircleView(color: .yellow)
-                    .opacity(yellowLightVisible ? signalIsOn : signalIsOff)
-                CircleView(color: .green)
-                    .opacity(greenLightVisible ? signalIsOn : signalIsOff)
-            }
+        ZStack {
+            Color.black
+                .ignoresSafeArea()
             
-            Button(action: {changeLightDidTapped()}) {
-                Text(titleButton)
-                    .font(.title)
-                    .minimumScaleFactor(0.5)
+            VStack(spacing: 20) {
+                CircleView(
+                    color: .red,
+                    opacity: currentColor == .red ? 1 : 0.3
+                )
+                CircleView(
+                    color: .green,
+                    opacity: currentColor == .yellow ? 1 : 0.3
+                )
+                CircleView(
+                    color: .yellow,
+                    opacity: currentColor == .green ? 1 : 0.3
+                )
+                
+                Spacer()
+                
+                StartButtonView(title: titleButton) {
+                    if titleButton == "START" {
+                        titleButton = "NEXT"
+                    }
+                    nextColor()
+                }
             }
-            .frame(width: 100, height: 50)
-            .padding(.horizontal, 20)
-            .padding(.vertical, 5)
-            .background(.blue)
-            .foregroundColor(.white)
-            .clipShape(.capsule)
+            .padding()
         }
     }
     // MARK: - Private methods
-    private func changeLightDidTapped() {
-        if titleButton == "START" {
-            titleButton = "NEXT"
+    private func nextColor() {
+        switch currentColor {
+        case .off: currentColor = .red
+        case .red: currentColor = .yellow
+        case .yellow: currentColor = .green
+        case .green: currentColor = .red
         }
         
-        withAnimation {
-            switch currentColor {
-            case .red:
-                currentColor = .yellow
-                redLightVisible = true
-                greenLightVisible = false
-            case .yellow:
-                currentColor = .green
-                redLightVisible = false
-                yellowLightVisible = true
-            case .green:
-                currentColor = .red
-                yellowLightVisible = false
-                greenLightVisible = true
-            }
-        }
     }
 }
 
     // MARK: - Extension Traffic Light
 extension ContentView {
-    enum TrafficLight {
-        case red, yellow, green
+    private enum TrafficLight {
+        case off, red, yellow, green
     }
 }
 
